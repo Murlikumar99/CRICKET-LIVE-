@@ -14,6 +14,8 @@
             --primary-glow: 0 0 10px rgba(37, 99, 235, 0.7), 0 0 20px rgba(37, 99, 235, 0.4);
             --secondary: #DC2626;
             --secondary-glow: 0 0 10px rgba(220, 38, 38, 0.5);
+            --live-indicator: #DC2626;
+            --live-glow: 0 0 10px rgba(220, 38, 38, 0.7);
             --bg-dark: #0F172A;
             --bg-darker: #0A1128;
             --bg-card: #1E293B;
@@ -32,6 +34,7 @@
             --primary-glow: 0 0 10px rgba(37, 99, 235, 0.5);
             --secondary: #DC2626;
             --secondary-glow: 0 0 10px rgba(220, 38, 38, 0.3);
+            --live-indicator: #DC2626;
             --bg-dark: #f0f2f5;
             --bg-darker: #e4e6ef;
             --bg-card: #ffffff;
@@ -249,77 +252,6 @@
             font-weight: 700;
         }
 
-        /* Access Key Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-content {
-            background-color: var(--bg-card);
-            padding: 35px;
-            border-radius: var(--radius);
-            max-width: 450px;
-            width: 90%;
-            text-align: center;
-            box-shadow: var(--shadow);
-            border-top: 3px solid var(--primary);
-        }
-
-        .modal h2 {
-            margin-bottom: 15px;
-            color: var(--primary);
-        }
-
-        .modal p {
-            margin-bottom: 25px;
-            color: var(--text-muted);
-            line-height: 1.6;
-        }
-
-        .key-input {
-            width: 100%;
-            padding: 15px;
-            border-radius: var(--radius);
-            border: 1px solid var(--border-light);
-            font-size: 1rem;
-            background-color: rgba(255, 255, 255, 0.05);
-            color: var(--text-light);
-            margin-bottom: 20px;
-            text-align: center;
-            letter-spacing: 2px;
-            font-weight: 600;
-        }
-
-        .key-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
-        }
-
-        .modal-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 15px;
-            color: var(--text-muted);
-        }
-
         /* Features Section */
         .features {
             margin: 60px 0;
@@ -534,10 +466,6 @@
                 font-size: 1.8rem;
             }
             
-            .modal-content {
-                padding: 25px;
-            }
-            
             .share-components {
                 flex-direction: row;
                 bottom: 70px;
@@ -570,6 +498,25 @@
             align-items: center;
             gap: 4px;
             z-index: 5;
+        }
+
+        /* Live Badge */
+        .live-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: var(--live-indicator);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            z-index: 5;
+            box-shadow: var(--live-glow);
+            animation: pulse 1.5s infinite;
         }
 
         /* Share Components */
@@ -667,6 +614,38 @@
         .blue-border {
             border-color: var(--primary);
         }
+
+        /* Watch Live Button */
+        .watch-live-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 16px 40px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--secondary) 0%, #B91C1C 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(220, 38, 38, 0.5), 0 0 20px rgba(220, 38, 38, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 10;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+
+        .watch-live-btn:hover {
+            transform: translate(-50%, -50%) scale(1.05);
+            box-shadow: 0 15px 30px rgba(220, 38, 38, 0.6), 0 0 25px rgba(220, 38, 38, 0.4);
+        }
+
+        .watch-live-btn i {
+            font-size: 1.5rem;
+        }
     </style>
 </head>
 <body>
@@ -706,8 +685,9 @@
                         <img src="https://i.ibb.co/N6kHcDRm/1758309747267801-ACC-SLvs-BAN-S4-tonight-20sep-preview-landscape-thumb.webp" alt="Cricket Match Preview" class="thumbnail-image">
                         <div class="thumbnail-overlay">
                             <div class="placeholder-content">
-                                <i class="fas fa-lock" style="font-size: 3rem; margin-bottom: 20px; color: var(--primary);"></i>
-                                <p>Enter access key to watch live streaming</p>
+                                <button class="watch-live-btn" id="watch-live-btn">
+                                    <i class="fas fa-play-circle"></i> WATCH LIVE
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -716,20 +696,20 @@
                 <div class="hd-badge">
                     <i class="fas fa-hd"></i> HD
                 </div>
+                <div class="live-badge">
+                    <i class="fas fa-circle"></i> LIVE
+                </div>
             </div>
 
             <div class="action-buttons">
-                <button class="btn btn-primary play-btn" id="play-btn">
-                    <i class="fas fa-play"></i> Watch Live
-                </button>
-                <button class="btn btn-secondary" id="reset-btn">
-                    <i class="fas fa-redo"></i> Reset
+                <button class="btn btn-secondary" id="reload-btn">
+                    <i class="fas fa-redo"></i> Reload Stream
                 </button>
             </div>
             
             <div class="server-status" id="server-status">
                 <div class="status-dot" id="status-dot"></div>
-                <span id="status-text">Enter access key to start streaming</span>
+                <span id="status-text">Click WATCH LIVE to start streaming</span>
             </div>
         </section>
 
@@ -785,54 +765,24 @@
     </div>
 
     <footer>
-        <p>&copy; 2023 Cricket Live Streaming. Premium access required.</p>
+        <p>&copy; 2023 Cricket Live Streaming. All rights reserved.</p>
         <p class="developer">Website Developed By Murli Kumar</p>
     </footer>
-
-    <!-- Access Key Modal -->
-    <div class="modal" id="access-key-modal">
-        <div class="modal-content">
-            <h2>Enter Access Key</h2>
-            <p>You need a valid access key to watch live streaming content. Please enter your access key.</p>
-            
-            <input type="password" class="key-input" id="access-key-input" placeholder="Enter your access key">
-            
-            <div class="modal-actions">
-                <button class="btn btn-primary" id="submit-key">
-                    <i class="fas fa-key"></i> Submit Key
-                </button>
-                <button class="btn btn-secondary" id="close-modal">Cancel</button>
-            </div>
-            
-            <div class="checkbox-group">
-                <input type="checkbox" id="remember-key">
-                <label for="remember-key">Remember key on this device</label>
-            </div>
-        </div>
-    </div>
 
     <div class="toast" id="toast"></div>
 
     <script>
         // DOM Elements
-        const accessKeyModal = document.getElementById('access-key-modal');
-        const accessKeyInput = document.getElementById('access-key-input');
-        const submitKeyBtn = document.getElementById('submit-key');
-        const closeModalBtn = document.getElementById('close-modal');
-        const rememberKeyCheckbox = document.getElementById('remember-key');
-        const playBtn = document.getElementById('play-btn');
-        const resetBtn = document.getElementById('reset-btn');
         const themeToggle = document.getElementById('theme-toggle');
         const statusDot = document.getElementById('status-dot');
         const statusText = document.getElementById('status-text');
         const toast = document.getElementById('toast');
         const devtoolsWarning = document.getElementById('devtools-warning');
+        const reloadBtn = document.getElementById('reload-btn');
+        const watchLiveBtn = document.getElementById('watch-live-btn');
         let spinner = document.getElementById('loading-spinner');
         
-        // Valid access key
-        const VALID_ACCESS_KEY = "Murli Kumar";
-        
-        // Video URL (hidden from user)
+        // Video URL
         const VIDEO_URL = "https://livecfdai-mp.slivcdn.com/out/v1/eee8ba24cb91405081f3263a292e12b9/std_mdd-600300010_6.m3u8?hdntl=exp=1758336016~acl=*~hmac=75de8d0f3d916747a0f783313f6ff01e53b388ab48e40e80bfafaec2e8bbca42&originpath=/linear/hls/pb/event/KqsXcdR0Ta2-bgmQzgV55A/stream/bc291388-3bc6-4d6a-b99d-2688ba258cd2:SIN/variant/ef4080ebd5ace5d0938c52f61db14450/bandwidth/813120.m3u8";
         
         // Developer tools detection
@@ -888,32 +838,6 @@
             }
         });
         
-        // Check if access key is already stored
-        function checkStoredAccessKey() {
-            const storedKey = localStorage.getItem('cricketAccessKey');
-            if (storedKey === VALID_ACCESS_KEY) {
-                return true;
-            }
-            return false;
-        }
-        
-        // Show modal function
-        function showAccessKeyModal() {
-            accessKeyModal.style.display = 'flex';
-            accessKeyInput.focus();
-        }
-        
-        // Hide modal function
-        function hideAccessKeyModal() {
-            accessKeyModal.style.display = 'none';
-            accessKeyInput.value = '';
-        }
-        
-        // Validate access key
-        function validateAccessKey(key) {
-            return key === VALID_ACCESS_KEY;
-        }
-        
         // Update server status
         function updateServerStatus(status, text) {
             statusDot.className = 'status-dot ' + status;
@@ -938,80 +862,44 @@
         
         // Play video function
         function playVideo() {
-            if (checkStoredAccessKey()) {
-                // Access key is valid, play the video
-                showLoadingSpinner(true);
-                updateServerStatus('connecting', 'Connecting to SonyLIV server...');
-                
-                // Simulate connection delay
-                setTimeout(() => {
-                    const playerContainer = document.getElementById('video-player');
-                    playerContainer.innerHTML = `
-                        <video id="main-video" controls autoplay style="width: 100%; height: 100%;">
-                            <source src="${VIDEO_URL}" type="application/x-mpegURL">
-                            Your browser does not support the video tag.
-                        </video>
-                    `;
-                    
-                    const video = document.getElementById('main-video');
-                    
-                    video.addEventListener('canplay', () => {
-                        showLoadingSpinner(false);
-                        updateServerStatus('connected', 'Connected to SonyLIV server');
-                        video.play().catch(e => {
-                            showToast('Autoplay blocked. Click play to start video.', 'error');
-                        });
-                    });
-                    
-                    video.addEventListener('error', () => {
-                        showLoadingSpinner(false);
-                        updateServerStatus('error', 'Connection failed');
-                        showToast('Error loading video. Please try again.', 'error');
-                    });
-                }, 2000);
-            } else {
-                // Show access key modal
-                showAccessKeyModal();
-            }
-        }
-        
-        // Reset player function
-        function resetPlayer() {
+            // Hide the watch live button
+            watchLiveBtn.style.display = 'none';
+            
+            showLoadingSpinner(true);
+            updateServerStatus('connecting', 'Connecting to SonyLIV server...');
+            
+            // Create video element
             const playerContainer = document.getElementById('video-player');
             playerContainer.innerHTML = `
-                <div class="player-placeholder">
-                    <img src="https://i.supaimg.com/55a65f9c-cc3a-4907-8441-638a8f29e50a.jpg" alt="Cricket Match Preview" class="thumbnail-image">
-                    <div class="thumbnail-overlay">
-                        <div class="placeholder-content">
-                            <i class="fas fa-lock" style="font-size: 3rem; margin-bottom: 20px; color: var(--primary);"></i>
-                            <p>Enter access key to watch live streaming</p>
-                        </div>
-                    </div>
-                </div>
+                <video id="main-video" controls autoplay style="width: 100%; height: 100%;">
+                    <source src="${VIDEO_URL}" type="application/x-mpegURL">
+                    Your browser does not support the video tag.
+                </video>
             `;
             
-            // Add HD badge back
-            const hdBadge = document.createElement('div');
-            hdBadge.className = 'hd-badge';
-            hdBadge.innerHTML = '<i class="fas fa-hd"></i> HD';
-            playerContainer.appendChild(hdBadge);
+            const video = document.getElementById('main-video');
             
-            // Add spinner back
-            const newSpinner = document.createElement('div');
-            newSpinner.className = 'spinner';
-            newSpinner.id = 'loading-spinner';
-            newSpinner.style.display = 'none';
-            playerContainer.appendChild(newSpinner);
-            spinner = newSpinner;
+            video.addEventListener('canplay', () => {
+                showLoadingSpinner(false);
+                updateServerStatus('connected', 'Connected to SonyLIV server');
+                video.play().catch(e => {
+                    showToast('Autoplay blocked. Click play to start video.', 'error');
+                });
+            });
             
-            // Clear stored access key
-            localStorage.removeItem('cricketAccessKey');
-            sessionStorage.removeItem('cricketAccessKey');
-            
-            // Reset server status
-            updateServerStatus('', 'Enter access key to start streaming');
-            
-            showToast('Player has been reset', 'success');
+            video.addEventListener('error', () => {
+                showLoadingSpinner(false);
+                updateServerStatus('error', 'Connection failed');
+                showToast('Error loading video. Please try again.', 'error');
+                // Show the watch live button again if there's an error
+                watchLiveBtn.style.display = 'flex';
+            });
+        }
+        
+        // Reload video function
+        function reloadVideo() {
+            playVideo();
+            showToast('Reloading stream...');
         }
         
         // Toggle theme function
@@ -1081,53 +969,8 @@
         }
         
         // Event Listeners
-        playBtn.addEventListener('click', playVideo);
-        
-        resetBtn.addEventListener('click', function() {
-            resetPlayer();
-            // Clear the remember key option
-            rememberKeyCheckbox.checked = false;
-        });
-        
-        submitKeyBtn.addEventListener('click', function() {
-            const key = accessKeyInput.value.trim();
-            
-            if (validateAccessKey(key)) {
-                // Save key if remember me is checked
-                if (rememberKeyCheckbox.checked) {
-                    localStorage.setItem('cricketAccessKey', key);
-                } else {
-                    // Store in sessionStorage for this session only
-                    sessionStorage.setItem('cricketAccessKey', key);
-                }
-                
-                hideAccessKeyModal();
-                showToast('Access granted! Enjoy the stream.', 'success');
-                
-                // Play the video after a short delay
-                setTimeout(playVideo, 1000);
-            } else {
-                showToast('Invalid access key. Please try again.', 'error');
-                accessKeyInput.value = '';
-                accessKeyInput.focus();
-            }
-        });
-        
-        closeModalBtn.addEventListener('click', hideAccessKeyModal);
-        
-        // Close modal when clicking outside
-        window.addEventListener('click', (e) => {
-            if (e.target === accessKeyModal) {
-                hideAccessKeyModal();
-            }
-        });
-        
-        // Allow submitting with Enter key
-        accessKeyInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                submitKeyBtn.click();
-            }
-        });
+        reloadBtn.addEventListener('click', reloadVideo);
+        watchLiveBtn.addEventListener('click', playVideo);
         
         // Theme toggle functionality
         themeToggle.addEventListener('click', toggleTheme);
@@ -1137,22 +980,8 @@
         document.getElementById('telegram-share').addEventListener('click', () => shareOnPlatform('telegram'));
         document.getElementById('copy-link').addEventListener('click', () => shareOnPlatform('copy'));
         
-        // Check session storage for access key
-        function checkSessionAccessKey() {
-            const sessionKey = sessionStorage.getItem('cricketAccessKey');
-            if (sessionKey === VALID_ACCESS_KEY) {
-                return true;
-            }
-            return false;
-        }
-        
         // Initialize
         initTheme();
-        
-        // Check if we have a valid access key in storage
-        if (checkStoredAccessKey() || checkSessionAccessKey()) {
-            updateServerStatus('', 'Ready to stream');
-        }
         
         // Initial devtools check
         detectDevTools();
